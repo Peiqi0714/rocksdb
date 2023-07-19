@@ -5,6 +5,7 @@
 //
 #pragma once
 #include <cinttypes>
+#include <iostream>
 
 #include "monitoring/histogram.h"
 #include "monitoring/statistics_impl.h"

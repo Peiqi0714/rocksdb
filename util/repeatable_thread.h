@@ -47,6 +47,9 @@ class RepeatableThread {
       running_ = false;
       cond_var_.SignalAll();
     }
+    if (thread_name_ == "rocksdb:titanst") {
+      function_();
+    }
     thread_.join();
   }
 

@@ -303,6 +303,7 @@ static const std::string block_cache_pinned_usage = "block-cache-pinned-usage";
 static const std::string options_statistics = "options-statistics";
 static const std::string num_blob_files = "num-blob-files";
 static const std::string blob_stats = "blob-stats";
+static const std::string blob_space_amp = "blob-space-amp";
 static const std::string total_blob_file_size = "total-blob-file-size";
 static const std::string live_blob_file_size = "live-blob-file-size";
 
@@ -403,6 +404,7 @@ const std::string DB::Properties::kLiveSstFilesSizeAtTemperature =
 const std::string DB::Properties::kNumBlobFiles =
     rocksdb_prefix + num_blob_files;
 const std::string DB::Properties::kBlobStats = rocksdb_prefix + blob_stats;
+const std::string DB::Properties::KBlobSpaceAmp = rocksdb_prefix + blob_space_amp;
 const std::string DB::Properties::kTotalBlobFileSize =
     rocksdb_prefix + total_blob_file_size;
 const std::string DB::Properties::kLiveBlobFileSize =
@@ -562,6 +564,8 @@ const std::unordered_map<std::string, DBPropertyInfo>
           nullptr}},
         {DB::Properties::kBlobStats,
          {false, &InternalStats::HandleBlobStats, nullptr, nullptr, nullptr}},
+        {DB::Properties::KBlobSpaceAmp,
+         {false, &InternalStats::HandleBlobSpaceAmp, nullptr,  nullptr, nullptr}},
         {DB::Properties::kTotalBlobFileSize,
          {false, nullptr, &InternalStats::HandleTotalBlobFileSize, nullptr,
           nullptr}},
@@ -776,15 +780,47 @@ bool InternalStats::HandleBlobStats(std::string* value, Slice /*suffix*/) {
   uint64_t current_num_blob_files = blob_files.size();
   uint64_t current_file_size = 0;
   uint64_t current_garbage_size = 0;
+  double space_amp = 0.0;
   for (const auto& pair : blob_files) {
     const auto& meta = pair.second;
     current_file_size += meta->GetBlobFileSize();
     current_garbage_size += meta->GetGarbageBlobBytes();
   }
+
+  if (current_file_size > current_garbage_size) {
+      space_amp = static_cast<double>(current_file_size) /
+                  (current_file_size - current_garbage_size);
+  }
+  
   oss << "Number of blob files: " << current_num_blob_files
       << "\nTotal size of blob files: " << current_file_size
       << "\nTotal size of garbage in blob files: " << current_garbage_size
+      << "\nBlob file space amplification: " << space_amp
       << '\n';
+  value->append(oss.str());
+  return true;
+}
+
+bool InternalStats::HandleBlobSpaceAmp(std::string* value, Slice /*suffix*/) {
+  std::ostringstream oss;
+  auto* current_version = cfd_->current();
+  const auto& blob_files = current_version->storage_info()->GetBlobFiles();
+  uint64_t current_num_blob_files = blob_files.size();
+  uint64_t current_file_size = 0;
+  uint64_t current_garbage_size = 0;
+  double space_amp = 0.0;
+  for (const auto& pair : blob_files) {
+    const auto& meta = pair.second;
+    current_file_size += meta->GetBlobFileSize();
+    current_garbage_size += meta->GetGarbageBlobBytes();
+  }
+
+  if (current_file_size > current_garbage_size) {
+      space_amp = static_cast<double>(current_file_size) /
+                  (current_file_size - current_garbage_size);
+  }
+
+  oss << space_amp;
   value->append(oss.str());
   return true;
 }

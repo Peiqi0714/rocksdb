@@ -18,6 +18,39 @@
 
 namespace ROCKSDB_NAMESPACE {
 
+extern const std::vector<std::string> TitanTickersName = {
+    "titandb.num.get",
+    "titandb.num.seek",
+    "titandb.num.next",
+    "titandb.num.prev",
+    "titandb.blob.file.num.keys.written",
+    "titandb.blob.file.num.keys.read",
+    "titandb.blob.file.bytes.written",
+    "titandb.blob.file.bytes.read",
+    "titandb.blob.file.synced",
+    "titandb.gc.num.files",
+    "titandb.gc.num.new.files",
+    "titandb.gc.num.keys.overwritten",
+    "titandb.gc.num.keys.relocated",
+    "titandb.gc.num.keys.fallback",
+    "titandb.gc.bytes.overwritten",
+    "titandb.gc.bytes.relocated",
+    "titandb.gc.bytes.fallback",
+    "titandb.gc.bytes.written",
+    "titandb.gc.bytes.read",
+    "titandb.blob.cache.hit",
+    "titandb.blob.cache.miss",
+    "titandb.gc.discardable",
+    "titandb.gc.small.file",
+    "titandb.gc.level.merge.mark",
+    "titandb.gc.level.merge.delete",
+    "titandb.gc.no.need",
+    "titandb.gc.remain",
+    "titandb.gc.failure",
+    "titandb.gc.success",
+    "titandb.gc.trigger.next",
+};
+
 // The order of items listed in Tickers should be the same as
 // the order listed in TickersNameMap
 const std::vector<std::pair<Tickers, std::string>> TickersNameMap = {
@@ -223,6 +256,23 @@ const std::vector<std::pair<Tickers, std::string>> TickersNameMap = {
     {HOT_FILE_READ_COUNT, "rocksdb.hot.file.read.count"},
     {WARM_FILE_READ_COUNT, "rocksdb.warm.file.read.count"},
     {COLD_FILE_READ_COUNT, "rocksdb.cold.file.read.count"},
+};
+
+const std::vector<std::string> TitanHistogramsName = {
+    "titandb.key.size",
+    "titandb.value.size",
+    "titandb.get.micros",
+    "titandb.seek.micros",
+    "titandb.next.micros",
+    "titandb.prev.micros",
+    "titandb.blob.file.write.micros",
+    "titandb.blob.file.read.micros",
+    "titandb.blob.file.sync.micros",
+    "titandb.manifest.file.sync.micros",
+    "titandb.gc.micros",
+    "titandb.gc.input.file.size",
+    "titandb.gc.output.file.size",
+    "titandb.iter.touch.blob.file.count",
 };
 
 const std::vector<std::pair<Histograms, std::string>> HistogramsNameMap = {

@@ -689,6 +689,7 @@ class InternalStats {
   bool HandleLiveSstFilesSizeAtTemperature(std::string* value, Slice suffix);
   bool HandleNumBlobFiles(uint64_t* value, DBImpl* db, Version* version);
   bool HandleBlobStats(std::string* value, Slice suffix);
+  bool HandleBlobSpaceAmp(std::string* value, Slice suffix);
   bool HandleTotalBlobFileSize(uint64_t* value, DBImpl* db, Version* version);
   bool HandleLiveBlobFileSize(uint64_t* value, DBImpl* db, Version* version);
   // Total number of background errors encountered. Every time a flush task

@@ -432,6 +432,8 @@ enum Tickers : uint32_t {
 // the order listed in TickersNameMap
 extern const std::vector<std::pair<Tickers, std::string>> TickersNameMap;
 
+extern const std::vector<std::string> TitanTickersName;
+
 /**
  * Keep adding histogram's here.
  * Any histogram should have value less than HISTOGRAM_ENUM_MAX
@@ -531,6 +533,8 @@ enum Histograms : uint32_t {
 
   HISTOGRAM_ENUM_MAX,
 };
+
+extern const std::vector<std::string> TitanHistogramsName;
 
 extern const std::vector<std::pair<Histograms, std::string>> HistogramsNameMap;
 

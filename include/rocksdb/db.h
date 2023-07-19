@@ -1087,6 +1087,9 @@ class DB {
     //      the current version.
     static const std::string kBlobStats;
 
+    // "rocksdb.blob-space-amp"
+    static const std::string KBlobSpaceAmp;
+
     // "rocksdb.total-blob-file-size" - returns the total size of all blob
     //      files over all versions.
     static const std::string kTotalBlobFileSize;

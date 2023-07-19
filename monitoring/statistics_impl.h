@@ -269,26 +269,66 @@ std::string StatisticsImpl<TICKER_MAX, HISTOGRAM_MAX>::ToString() const {
   MutexLock lock(&aggregate_lock_);
   std::string res;
   res.reserve(20000);
-  for (const auto& t : TickersNameMap) {
-    assert(t.first < TICKER_MAX);
+  // for (const auto& t : TickersNameMap) {
+  //   assert(t.first < TICKER_MAX);
+  //   char buffer[kTmpStrBufferSize];
+  //   snprintf(buffer, kTmpStrBufferSize, "%s COUNT : %" PRIu64 "\n",
+  //            t.second.c_str(), getTickerCountLocked(t.first));
+  //   res.append(buffer);
+  // }
+  uint32_t i;
+  for (i = 0; i < TICKER_MAX; i++) {
     char buffer[kTmpStrBufferSize];
-    snprintf(buffer, kTmpStrBufferSize, "%s COUNT : %" PRIu64 "\n",
-             t.second.c_str(), getTickerCountLocked(t.first));
+    if (i < TICKER_ENUM_MAX) {
+      snprintf(buffer, kTmpStrBufferSize, "%s COUNT : %" PRIu64 "\n",
+             TickersNameMap[i].second.c_str(), getTickerCountLocked(i));
+    } else {
+      //Titan ticker
+      snprintf(buffer, kTmpStrBufferSize, "%s COUNT : %" PRIu64 "\n",
+             TitanTickersName[i - TICKER_ENUM_MAX].c_str(), getTickerCountLocked(i));
+    }
     res.append(buffer);
   }
-  for (const auto& h : HistogramsNameMap) {
-    assert(h.first < HISTOGRAM_MAX);
+  // for (const auto& h : HistogramsNameMap) {
+  //   assert(h.first < HISTOGRAM_MAX);
+  //   char buffer[kTmpStrBufferSize];
+  //   HistogramData hData;
+  //   getHistogramImplLocked(h.first)->Data(&hData);
+  //   // don't handle failures - buffer should always be big enough and arguments
+  //   // should be provided correctly
+  //   int ret =
+  //       snprintf(buffer, kTmpStrBufferSize,
+  //                "%s P50 : %f P95 : %f P99 : %f P100 : %f COUNT : %" PRIu64
+  //                " SUM : %" PRIu64 "\n",
+  //                h.second.c_str(), hData.median, hData.percentile95,
+  //                hData.percentile99, hData.max, hData.count, hData.sum);
+  //   if (ret < 0 || ret >= kTmpStrBufferSize) {
+  //     assert(false);
+  //     continue;
+  //   }
+  //   res.append(buffer);
+  // }
+  for (i = 0; i < HISTOGRAM_MAX; i++) {
+    int ret;
     char buffer[kTmpStrBufferSize];
     HistogramData hData;
-    getHistogramImplLocked(h.first)->Data(&hData);
-    // don't handle failures - buffer should always be big enough and arguments
-    // should be provided correctly
-    int ret =
+    getHistogramImplLocked(i)->Data(&hData);
+    if (i < HISTOGRAM_ENUM_MAX) {
+      ret =
         snprintf(buffer, kTmpStrBufferSize,
                  "%s P50 : %f P95 : %f P99 : %f P100 : %f COUNT : %" PRIu64
                  " SUM : %" PRIu64 "\n",
-                 h.second.c_str(), hData.median, hData.percentile95,
+                 HistogramsNameMap[i].second.c_str(), hData.median, hData.percentile95,
                  hData.percentile99, hData.max, hData.count, hData.sum);
+    } else {
+      //Titan histogram
+      ret =
+        snprintf(buffer, kTmpStrBufferSize,
+                 "%s P50 : %f P95 : %f P99 : %f P100 : %f COUNT : %" PRIu64
+                 " SUM : %" PRIu64 "\n",
+                 TitanHistogramsName[i - HISTOGRAM_ENUM_MAX].c_str(), hData.median, hData.percentile95,
+                 hData.percentile99, hData.max, hData.count, hData.sum);
+    }
     if (ret < 0 || ret >= kTmpStrBufferSize) {
       assert(false);
       continue;
