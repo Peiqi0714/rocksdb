@@ -155,6 +155,10 @@ class MockTableBuilder : public TableBuilder {
     }
   }
 
+  void RecordDrop(const Slice& value, std::map<uint64_t, std::set<uint64_t>>* drop_keys) override {
+    return;
+  }
+
   // Return non-ok iff some error has been detected.
   Status status() const override { return Status::OK(); }
 

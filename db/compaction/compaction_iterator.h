@@ -231,6 +231,11 @@ class CompactionIterator {
   const CompactionIterationStats& iter_stats() const { return iter_stats_; }
   uint64_t num_input_entry_scanned() const { return input_.num_itered(); }
 
+  void SetTableBuilder(TableBuilder* builder) { builder_ = builder; }
+  void SetDropKeys(std::map<uint64_t, std::set<uint64_t>>* drop_keys) {
+    drop_keys_ = drop_keys;
+  }
+  
  private:
   // Processes the input stream to find the next output
   void NextFromInput();
@@ -327,6 +332,8 @@ class CompactionIterator {
   bool expect_valid_internal_key_;
   CompactionRangeDelAggregator* range_del_agg_;
   BlobFileBuilder* blob_file_builder_;
+  TableBuilder* builder_;
+  std::map<uint64_t, std::set<uint64_t>>* drop_keys_ = NULL;
   std::unique_ptr<CompactionProxy> compaction_;
   const CompactionFilter* compaction_filter_;
   const std::atomic<bool>* shutting_down_;

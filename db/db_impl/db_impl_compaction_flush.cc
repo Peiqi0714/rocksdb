@@ -347,6 +347,7 @@ Status DBImpl::FlushMemTableToOutputFile(
   // install new SST file path.
   if (s.ok() && (!switched_to_mempurge)) {
 #ifndef ROCKSDB_LITE
+    // peiqi
     // may temporarily unlock and lock the mutex.
     NotifyOnFlushCompleted(cfd, mutable_cf_options,
                            flush_job.GetCommittedFlushJobsInfo());
@@ -3074,7 +3075,9 @@ Status DBImpl::BackgroundCompaction(bool* made_progress,
   bool trivial_move_disallowed =
       is_manual && manual_compaction->disallow_trivial_move;
 
+  std::map<uint64_t, std::set<uint64_t>> drop_keys;
   CompactionJobStats compaction_job_stats;
+  compaction_job_stats.drop_keys = &drop_keys;
   Status status;
   if (!error_handler_.IsBGWorkStopped()) {
     if (shutting_down_.load(std::memory_order_acquire)) {
@@ -3458,7 +3461,7 @@ Status DBImpl::BackgroundCompaction(bool* made_progress,
       sfm->OnCompactionCompletion(c.get());
     }
 #endif  // ROCKSDB_LITE
-
+    // peiqi
     NotifyOnCompactionCompleted(c->column_family_data(), c.get(), status,
                                 compaction_job_stats, job_context->job_id);
   }

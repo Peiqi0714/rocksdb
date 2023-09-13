@@ -906,6 +906,10 @@ BlockBasedTableBuilder::~BlockBasedTableBuilder() {
   delete rep_;
 }
 
+void BlockBasedTableBuilder::RecordDrop(const Slice& value, std::map<uint64_t, std::set<uint64_t>>* drop_keys) {
+  return;
+}
+
 void BlockBasedTableBuilder::Add(const Slice& key, const Slice& value) {
   Rep* r = rep_;
   assert(rep_->state != Rep::State::kClosed);

@@ -71,4 +71,24 @@ extern Status BuildTable(
     uint64_t* memtable_payload_bytes = nullptr,
     uint64_t* memtable_garbage_bytes = nullptr);
 
+extern Status BuildTable(
+    const std::string& dbname, VersionSet* versions,
+    const ImmutableDBOptions& db_options, const TableBuilderOptions& tboptions,
+    const FileOptions& file_options, TableCache* table_cache,
+    InternalIterator* iter,
+    std::vector<std::unique_ptr<FragmentedRangeTombstoneIterator>>
+        range_del_iters,
+    FileMetaData* meta, std::vector<BlobFileAddition>* blob_file_additions,
+    std::vector<SequenceNumber> snapshots,
+    SequenceNumber earliest_write_conflict_snapshot,
+    SnapshotChecker* snapshot_checker, bool paranoid_file_checks,
+    InternalStats* internal_stats, IOStatus* io_status,
+    const std::shared_ptr<IOTracer>& io_tracer,
+    BlobFileCreationReason blob_creation_reason, EventLogger* event_logger,
+    int job_id, const Env::IOPriority io_priority,
+    TableProperties* table_properties, std::map<uint64_t, std::set<uint64_t>>* drop_keys, 
+    Env::WriteLifeTimeHint write_hint, const std::string* full_history_ts_low,
+    BlobFileCompletionCallback* blob_callback, uint64_t* num_input_entries,
+    uint64_t* memtable_payload_bytes, uint64_t* memtable_garbage_bytes);
+
 }  // namespace ROCKSDB_NAMESPACE

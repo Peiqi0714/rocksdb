@@ -88,6 +88,10 @@ CuckooTableBuilder::CuckooTableBuilder(
   io_status_.PermitUncheckedError();
 }
 
+void CuckooTableBuilder::RecordDrop(const Slice& value, std::map<uint64_t, std::set<uint64_t>>* drop_keys) {
+  return;
+}
+
 void CuckooTableBuilder::Add(const Slice& key, const Slice& value) {
   if (num_entries_ >= kMaxVectorIdx - 1) {
     status_ = Status::NotSupported("Number of keys in a file must be < 2^32-1");

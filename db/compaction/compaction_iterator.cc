@@ -750,8 +750,17 @@ void CompactionIterator::NextFromInput() {
                         ") < current_user_key_sequence_ (%" PRIu64 ")",
                         last_sequence, current_user_key_sequence_);
       }
-
+      // peiqi TODO: add GC logic
+      // how to get blobstorage
+      // how to get blobfilemeta
       ++iter_stats_.num_record_drop_hidden;  // rule (A)
+      if (ikey_.type == kTypeBlobIndex) {
+        if (!builder_) {
+          ROCKS_LOG_ERROR(info_log_, "no table builer, can't record drop key's order");
+        } else {
+          builder_->RecordDrop(value_, drop_keys_);
+        }
+      }
       AdvanceInputIter();
     } else if (compaction_ != nullptr &&
                (ikey_.type == kTypeDeletion ||

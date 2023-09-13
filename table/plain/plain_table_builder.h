@@ -59,6 +59,8 @@ class PlainTableBuilder: public TableBuilder {
   // REQUIRES: Finish(), Abandon() have not been called
   void Add(const Slice& key, const Slice& value) override;
 
+  void RecordDrop(const Slice& value, std::map<uint64_t, std::set<uint64_t>>* drop_keys) override;
+
   // Return non-ok iff some error has been detected.
   Status status() const override { return status_; }
 

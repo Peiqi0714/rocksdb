@@ -176,6 +176,9 @@ class TableBuilder {
   // REQUIRES: Finish(), Abandon() have not been called
   virtual void Add(const Slice& key, const Slice& value) = 0;
 
+  // Add with drop logic
+  virtual void RecordDrop(const Slice& value, std::map<uint64_t, std::set<uint64_t>>* drop_keys) = 0;
+
   // Return non-ok iff some error has been detected.
   virtual Status status() const = 0;
 

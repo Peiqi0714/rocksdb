@@ -7,6 +7,8 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <string>
+#include <set>
+#include <map>
 
 #include "rocksdb/rocksdb_namespace.h"
 
@@ -102,5 +104,8 @@ struct CompactionJobStats {
 
   // number of single-deletes which meet something other than a put
   uint64_t num_single_del_mismatch;
+
+  // drop keys
+  std::map<uint64_t, std::set<uint64_t>>* drop_keys;
 };
 }  // namespace ROCKSDB_NAMESPACE

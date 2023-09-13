@@ -1392,7 +1392,20 @@ void CompactionJob::ProcessKeyValueCompaction(SubcompactionState* sub_compact) {
       sub_compact->compaction, compaction_filter, shutting_down_,
       preserve_deletes_seqnum_, manual_compaction_paused_,
       manual_compaction_canceled_, db_options_.info_log, full_history_ts_low));
+  
+  sub_compact->c_iter->SetDropKeys(compaction_job_stats_->drop_keys);
+
   auto c_iter = sub_compact->c_iter.get();
+  
+  // peiqi
+  if (sub_compact->builder == nullptr) {
+    status = OpenCompactionOutputFile(sub_compact);
+    if (!status.ok()) {
+      std::cout << "OpenCompactionOutputFile failed" << std::endl;
+    }
+    c_iter->SetTableBuilder(sub_compact->builder.get());
+  }
+  
   c_iter->SeekToFirst();
   if (c_iter->Valid() && sub_compact->compaction->output_level() != 0) {
     sub_compact->FillFilesToCutForTtl();
@@ -1432,6 +1445,7 @@ void CompactionJob::ProcessKeyValueCompaction(SubcompactionState* sub_compact) {
       if (!status.ok()) {
         break;
       }
+      c_iter->SetTableBuilder(sub_compact->builder.get());
     }
     status = sub_compact->AddToBuilder(key, value);
     if (!status.ok()) {

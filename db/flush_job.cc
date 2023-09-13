@@ -802,6 +802,7 @@ Status FlushJob::WriteLevel0Table() {
   Status s;
 
   std::vector<BlobFileAddition> blob_file_additions;
+  std::map<uint64_t, std::set<uint64_t>> drop_keys;
 
   {
     auto write_hint = cfd_->CalculateSSTWriteHint(0);
@@ -910,7 +911,7 @@ Status FlushJob::WriteLevel0Table() {
           earliest_write_conflict_snapshot_, snapshot_checker_,
           mutable_cf_options_.paranoid_file_checks, cfd_->internal_stats(),
           &io_s, io_tracer_, BlobFileCreationReason::kFlush, event_logger_,
-          job_context_->job_id, Env::IO_HIGH, &table_properties_, write_hint,
+          job_context_->job_id, Env::IO_HIGH, &table_properties_, &drop_keys_, write_hint,
           full_history_ts_low, blob_callback_, &num_input_entries,
           &memtable_payload_bytes, &memtable_garbage_bytes);
       if (!io_s.ok()) {
@@ -1034,6 +1035,7 @@ std::unique_ptr<FlushJobInfo> FlushJob::GetFlushJobInfo() const {
   info->smallest_seqno = meta_.fd.smallest_seqno;
   info->largest_seqno = meta_.fd.largest_seqno;
   info->table_properties = table_properties_;
+  info->drop_keys = drop_keys_;
   info->flush_reason = cfd_->GetFlushReason();
   info->blob_compression_type = mutable_cf_options_.blob_compression_type;
 

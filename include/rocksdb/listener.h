@@ -343,6 +343,8 @@ struct FlushJobInfo {
   // Table properties of the table being flushed
   TableProperties table_properties;
 
+  std::map<uint64_t, std::set<uint64_t>> drop_keys;
+
   FlushReason flush_reason;
 
   // Compression algorithm used for blob output files

@@ -132,6 +132,10 @@ PlainTableBuilder::~PlainTableBuilder() {
   io_status_.PermitUncheckedError();
 }
 
+void PlainTableBuilder::RecordDrop(const Slice& value, std::map<uint64_t, std::set<uint64_t>>* drop_keys) {
+  return;
+}
+
 void PlainTableBuilder::Add(const Slice& key, const Slice& value) {
   // temp buffer for metadata bytes between key and value.
   char meta_bytes_buf[6];
