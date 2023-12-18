@@ -58,6 +58,13 @@ extern std::string BlobFileName(const std::string& bdirname, uint64_t number);
 extern std::string BlobFileName(const std::string& dbname,
                                 const std::string& blob_dir, uint64_t number);
 
+extern std::string ShadowFileName(uint64_t number);
+
+extern std::string ShadowFileName(const std::string& sdirname, uint64_t number);
+
+extern std::string ShadowFileName(const std::string& dbname,
+                                  const std::string& shadow_dir, uint64_t number);
+
 extern std::string ArchivalDirectory(const std::string& dbname);
 
 //  Return the name of the archived log file with the specified number

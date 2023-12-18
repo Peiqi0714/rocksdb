@@ -2110,6 +2110,7 @@ void CompactionJob::RecordCompactionIOStats() {
   IOSTATS_RESET(bytes_written);
 }
 
+// peiqi: compaction create sst
 Status CompactionJob::OpenCompactionOutputFile(
     SubcompactionState* sub_compact) {
   assert(sub_compact != nullptr);

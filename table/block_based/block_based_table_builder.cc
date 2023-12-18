@@ -910,7 +910,7 @@ void BlockBasedTableBuilder::RecordDrop(const Slice& value, std::map<uint64_t, s
   return;
 }
 
-void BlockBasedTableBuilder::Add(const Slice& key, const Slice& value) {
+void BlockBasedTableBuilder::Add(const Slice& key, const Slice& value) { 
   Rep* r = rep_;
   assert(rep_->state != Rep::State::kClosed);
   if (!ok()) return;

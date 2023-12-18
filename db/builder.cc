@@ -52,6 +52,7 @@ TableBuilder* NewTableBuilder(const TableBuilderOptions& tboptions,
   return tboptions.ioptions.table_factory->NewTableBuilder(tboptions, file);
 }
 
+// peiqi: flush create sst
 Status BuildTable(
     const std::string& dbname, VersionSet* versions,
     const ImmutableDBOptions& db_options, const TableBuilderOptions& tboptions,

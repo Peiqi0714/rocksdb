@@ -27,6 +27,7 @@ const std::string kTempFileNameSuffix = "dbtmp";
 static const std::string kRocksDbTFileExt = "sst";
 static const std::string kLevelDbTFileExt = "ldb";
 static const std::string kRocksDBBlobFileExt = "blob";
+static const std::string kTitanShadowFileExt = "shadow";
 static const std::string kArchivalDirName = "archive";
 static const std::string kUnencryptedTempFileNameSuffix = "dbtmp.plain";
 
@@ -124,6 +125,23 @@ std::string BlobFileName(const std::string& dbname, const std::string& blob_dir,
   assert(number > 0);
   return MakeFileName(dbname + "/" + blob_dir, number,
                       kRocksDBBlobFileExt.c_str());
+}
+
+std::string ShadowFileName(uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(number, kTitanShadowFileExt.c_str());
+}
+
+std::string ShadowFileName(const std::string& shadowdirname, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(shadowdirname, number, kTitanShadowFileExt.c_str());
+}
+
+std::string ShadowFileName(const std::string& dbname, const std::string& shadow_dir,
+                           uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(dbname + "/" + shadow_dir, number,
+                      kTitanShadowFileExt.c_str());
 }
 
 std::string ArchivalDirectory(const std::string& dir) {

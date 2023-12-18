@@ -23,6 +23,7 @@ enum class TableFileCreationReason {
   kFlush,
   kCompaction,
   kRecovery,
+  kShadow,
   kMisc,
 };
 
