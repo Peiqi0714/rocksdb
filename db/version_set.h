@@ -773,13 +773,21 @@ class Version {
   //    merge_context.operands_list and don't merge the operands
   // REQUIRES: lock is not held
   // REQUIRES: pinned_iters_mgr != nullptr
+  // void Get(const ReadOptions&, const LookupKey& key, PinnableSlice* value,
+  //          std::string* timestamp, Status* status, MergeContext* merge_context,
+  //          SequenceNumber* max_covering_tombstone_seq,
+  //          PinnedIteratorsManager* pinned_iters_mgr,
+  //          bool* value_found = nullptr, bool* key_exists = nullptr,
+  //          SequenceNumber* seq = nullptr, ReadCallback* callback = nullptr,
+  //          bool* is_blob = nullptr, bool do_merge = true);
+
   void Get(const ReadOptions&, const LookupKey& key, PinnableSlice* value,
            std::string* timestamp, Status* status, MergeContext* merge_context,
            SequenceNumber* max_covering_tombstone_seq,
            PinnedIteratorsManager* pinned_iters_mgr,
            bool* value_found = nullptr, bool* key_exists = nullptr,
            SequenceNumber* seq = nullptr, ReadCallback* callback = nullptr,
-           bool* is_blob = nullptr, bool do_merge = true);
+           bool* is_blob = nullptr, bool do_merge = true, bool return_level = false, int* level = nullptr);
 
   void MultiGet(const ReadOptions&, MultiGetRange* range,
                 ReadCallback* callback = nullptr);

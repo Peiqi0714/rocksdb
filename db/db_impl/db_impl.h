@@ -554,6 +554,9 @@ class DBImpl : public DB {
     PinnableSlice* merge_operands = nullptr;
     GetMergeOperandsOptions* get_merge_operands_options = nullptr;
     int* number_of_operands = nullptr;
+
+    bool return_level = false;
+    int level = -1;
   };
 
   // Function that Get and KeyMayExist call with no_io true or false
